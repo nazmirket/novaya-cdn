@@ -1,0 +1,148 @@
+<html>
+	<head>
+		<style>
+			body,
+			html {
+				margin: 0;
+				padding: 0;
+				font-family: sans-serif;
+				background-color: rgb(236, 236, 236);
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				height: 100vh;
+				width: 100vw;
+			}
+
+			.info {
+				width: 400px;
+				min-height: 360px;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				text-align: center;
+				border-radius: 20px;
+				border: 1px solid #e0e0e0;
+				background-color: #fff;
+				overflow: hidden;
+				box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			}
+
+			h1 {
+				font-size: 24px;
+				margin: 0;
+				color: #117242;
+			}
+
+			p {
+				font-size: 16px;
+				margin: 0;
+				color: #125d30;
+				max-width: 250px;
+			}
+
+			.counter {
+				width: 100%;
+				padding: 10px;
+				border-top: 1px solid #e0e0e0;
+			}
+
+			.content {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				height: 100%;
+				width: 100%;
+				min-height: 280px;
+				row-gap: 8px;
+			}
+
+			button {
+				width: calc(100% - 20px);
+				margin: 10px 0;
+				padding: 15px 20px;
+				border: none;
+				border-radius: 12px;
+				background-color: #1b8b50;
+				color: #fff;
+				cursor: pointer;
+				font-size: 16px;
+				margin-top: auto;
+			}
+
+			svg {
+				width: 100%;
+				height: 100%;
+				max-width: 100px;
+				max-height: 100px;
+				stroke: #e2f0e9;
+			}
+		</style>
+	</head>
+	<body>
+		<script>
+			window.onload = () => {
+				const params = new URLSearchParams(window.location.search)
+				const lang = params.get('lang') || 'prm'
+
+				const title = { prm: 'Payment Successfull', scn: 'Ödeme Başarılı' }
+				const detail = {
+					prm: 'Your payment has been successfully completed.',
+					scn: 'Ödemeniz başarılı bir şekilde gerçekleşti.',
+				}
+				const button = { prm: 'Close window', scn: 'Pencereyi kapat' }
+
+				document.querySelector('h1').innerText = title[lang]
+				document.querySelector('p').innerText = detail[lang]
+				document.querySelector('button').innerText = button[lang]
+
+				document.querySelector('button').addEventListener('click', () => {
+					window.parent.postMessage('close', '*')
+				})
+
+				const counter = {
+					prm: v => `Will close in ${v} seconds`,
+					scn: v => `${v} saniye içinde kapanacak`,
+				}
+
+				let time = 59
+				document.querySelector('.counter span').innerText = counter[lang]?.(time)
+
+				setInterval(() => {
+					time--
+					document.querySelector('.counter span').innerText = counter[lang]?.(time)
+					if (time === 0) {
+						window.parent.postMessage('close', '*')
+					}
+				}, 1000)
+			}
+		</script>
+
+		<div class="info">
+			<div class="content">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="24"
+					height="24"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					class="lucide lucide-circle-check-big"
+				>
+					<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+					<path d="m9 11 3 3L22 4" />
+				</svg>
+				<h1></h1>
+				<p></p>
+			</div>
+			<button></button>
+			<div class="counter">
+				<span></span>
+			</div>
+		</div>
+	</body>
+</html>
